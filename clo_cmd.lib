@@ -1,7 +1,18 @@
+#-------------------------------------------------------------------------------- 
+#
+# filename      : clo_cmd.lib
+#
+# description   : this bash library helps to exeutes command
+#                 e.g.: doit "mkdir test"
+#
+# author        : christian.lochmatter@gmail.com
+#
+# version       : 0.0.1
+#
+# history       : 27.07.2012 implementation
+#
+#-------------------------------------------------------------------------------- 
 # Regular Colors
-
-
-
 Black='\e[0;30m'        # Black
 Red='\e[1;31m'          # Red
 Green='\e[0;32m'        # Green
