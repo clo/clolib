@@ -1,0 +1,76 @@
+# Regular Colors
+
+
+
+Black='\e[0;30m'        # Black
+Red='\e[1;31m'          # Red
+Green='\e[0;32m'        # Green
+Yellow='\e[0;33m'       # Yellow
+Blue='\e[0;34m'         # Blue
+Purple='\e[0;35m'       # Purple
+Cyan='\e[0;36m'         # Cyan
+White='\e[0;37m'        # White
+Color_Off='\e[0m'       # Text Reset
+
+LEAVE_DUE_TO_FAILURE=0
+WIDTH_FOR_COMMAND=120
+
+setColor(){
+  c=$1
+  echo -en $c
+}
+
+noColor(){
+  echo -en $Color_Off
+}
+
+printFailed(){
+  echo -n "[ "
+  setColor "$Red"
+  echo -n "FAILED"
+  noColor
+  echo " ]"
+}
+
+printSuccess(){
+  echo -n "[ "
+  setColor "$Green"
+  echo -n "OK"
+  noColor
+  echo " ]"
+}
+
+checkIt(){
+  code=$1
+  exitOnFailure=$2
+  if [ $code -eq 0 ]; then
+     #green
+	 printSuccess
+ else
+     #red
+	 printFailed
+	 if [ "$exitOnFailure" == "TRUE" ]; then
+	    LEAVE_DUE_TO_FAILURE=1
+	 fi
+  fi
+}
+
+#------------------------------------------------------------------------------
+#
+# doit
+#
+# input: 
+#   commando      : commando to execute
+#   exitOnFailure : leave script if return code is greater than 0
+#
+doit(){
+  com=$1
+  exitOnFailure=$2
+  TS=$(date '+%d%m%YT%H%M%s')
+  printf "%-20s > %-${WIDTH_FOR_COMMAND}s" "$TS" "$1"
+  eval "$com 2> /dev/null"
+  checkIt $? $exitOnFailure
+  if [[ "$exitOnFailure" == "TRUE" && $LEAVE_DUE_TO_FAILURE -eq 1 ]]; then
+	exit 1
+  fi
+}
